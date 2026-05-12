@@ -1,0 +1,60 @@
+6.MapReduce
+Show db
+
+use assign1
+
+db.createCollection("Book");
+
+
+db.Book.insert({id:"3586824624",title:"Database Management System",author:"S.Sudharshan",dept:"IT",subject:"ADBMS",price:756.76})
+
+db.Book.insert({id:"8753698428",title:"Designing The User Interface",author:"Alan Dix",dept:"IT",subject:"HCI",price:876.75})
+
+db.Book.insert([{id:"2376574365",title:"Machine Design",author:"Saul Fenster",dept:"ME",subject:"Machine Design",price:975},{id:"4868362945",title:"Digital Electronics",dept:"EE",price:832.765},{id:298374574,title:"Engineering Thermodyanamics",author:"P.K.Nag",dept:"ME",price:732.98}])
+
+
+db.Book.find().pretty()
+
+
+var mf=function(){emit(this.dept,this.price)}
+
+
+var rf=function(Department,Total){return Array.sum(Total)}
+
+
+db.Book.mapReduce(mf,rf,{query:{dept:"IT"},out:"Total"})
+
+
+db.Total.find()
+var mf=function(){emit(this.dept,this.price)}
+
+
+var rf=function(Department,Total){return Array.avg(Total)}
+
+
+db.Book.mapReduce(mf,rf,{query:{dept:"IT"},out:"Average"})
+
+
+db.Average.find() 
+
+
+db.Book.aggregate([{$match:{"dept":"IT"}},{$group:{_id:{"department":"$dept"},total:{$sum:"$price"}}}])  
+
+
+
+db.Book.aggregate([{$match:{"author":"AlanDix"}},{$group:{_id:{"department":"$dept"},total:{$avg:"$price"}}}])
+
+
+db.Book.aggregate([{$match:{"dept":"IT"}},{$group:{_id:{"department":"$dept"},min:{$min:"$price"}}}])
+
+
+db.Book.aggregate([{$match:{"dept":"IT"}},{$group:{_id:{"department":"$dept"},max:{$max:"$price"}}}])
+
+db.Book.createIndex({"price":1})
+
+db.Book.getIndexes()
+
+db.Book.dropIndexes({price:1})
+
+db.Book.getIndexes()
+

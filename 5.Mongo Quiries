@@ -1,0 +1,92 @@
+1.Mongo Queries
+
+Show dbs
+
+
+use db
+
+
+db.createCollection("Book");
+
+show collections
+
+
+db.Book.insert({id:"3586824624",title:"Database Management 
+
+System",author:"S.Sudharshan",dept:"IT",subject:"ADBMS",price:756.76})
+
+
+
+
+db.Book.insert({id:"8753698428",title:"Designing The User Interface",author:"Alan Dix",dept:"IT",subject:"HCI",price:876.75})
+
+db.Book.find().pretty()
+
+
+db.Book.insert([{id:"2376574365",title:"Machine Design",author:"Saul Fenster",dept:"ME",subject:"Machine Design",price:975},{id:"4868362945",title:"Digital Electronics",dept:"EE",price:832.765},{id:298374574,title:"Engineering Thermodyanamics",author:"P.K.Nag",dept:"ME",price:732.98}])
+
+db.Book.find().pretty()
+db.Book.remove({title:"Engineering Thermodyanamics"})
+
+
+db.Book.find().pretty()
+db.Book.update({title:"Machine Design"},{id:"23567897656",title:"Machine Design",author:"Alexander Fleming",subject:"Machine Design",price:823.098})
+
+db.Book.update({title:"Digital Electronics"},{$set:{subject:"DSP"}})
+
+2 .Query operations 
+
+db.Book.find({price:{$gte:700,$lte:800}}).pretty()
+
+
+db.Book.find({price:{$gte:800}}).pretty()
+
+db.Book.find({price:{$gte:800}}).count()
+
+db.Book.find({},{_id:0,title:1})   //specific attribute 
+
+
+db.Book.find({},{_id:false}).pretty()
+
+
+
+db.Book.find({author:/^A/}).pretty()
+
+
+db.Book.find({author:/x$/}).pretty()
+
+db.Book.distinct("dept")
+
+db.Book.findOne({dept:"IT"})
+
+db.Book.update({id:"3586824624"},{$inc:{price:50}})
+
+db.Book.find({$and:[{author:"Alan Dix"},{dept:"IT"}]}).pretty()
+
+db.Book.find({$or:[{author:"Alan Dix"},{dept:"IT"}]}).pretty()
+
+db.Book.find({author:{$ne:"Alan Dix"}}).pretty()
+
+3.cousor opretion
+db.Book.find().pretty().limit(2)
+
+db.Book.find().pretty().skip(2)
+
+db.Book.find().sort({price:-1}).pretty()
+
+db.Book.find().sort({price:1}).pretty()
+
+
+4.update(upsert &multitrue)
+
+
+db.Book.update({"dept":"IT"},{$set:{"price":750}},{multi:true})
+
+db.Book.find().pretty()
+
+
+db.Book.update({"price":832.765},{$set:{"dept":"E&TC"}},{upsert:true})
+
+	
+db.Book.find().pretty()
+
